@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wallet_f/screen/wallet_detail.dart';
 
 class WalletList extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class WalletListState  extends State<WalletList>{
       floatingActionButton: FloatingActionButton(
         onPressed:(){
          debugPrint('FAB clicked');
+        navigateToDetail("Add Wallet");
       },
         tooltip: 'Add Note',
         child: Icon(Icons.add),
@@ -53,6 +55,8 @@ class WalletListState  extends State<WalletList>{
 
               onTap:(){
                 debugPrint("ListTile Tapped");
+               navigateToDetail('Edit Wallet ');
+
               },
             ) ,
 
@@ -60,5 +64,11 @@ class WalletListState  extends State<WalletList>{
 
         },
     );
+  }
+
+  void navigateToDetail(String title){
+    Navigator.push(context, MaterialPageRoute(builder: (context){
+      return WalletDetail(title);
+    }));
   }
 }

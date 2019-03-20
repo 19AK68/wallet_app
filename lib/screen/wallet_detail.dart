@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class WalletDetail extends StatefulWidget{
+  String appBarTitle;
+  WalletDetail(this.appBarTitle);
+
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return WalletDetailState();
+
+    return WalletDetailState(this.appBarTitle);
   }
 
 }
@@ -12,18 +15,30 @@ class WalletDetail extends StatefulWidget{
 class WalletDetailState extends State<WalletDetail>{
   static var _priorities = ["Credit","Debit"];
 
+  String appBarTitle;
+
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-
+  WalletDetailState(this.appBarTitle);
 
   @override
   Widget build(BuildContext context) {
 
     TextStyle textStyle = Theme.of(context).textTheme.title;
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: (){
+        //Write some code to control things, when user press Back navigation button in device
+        moveToLastScreen();
+      },
+      child: Scaffold(
       appBar: AppBar(
-        title: Text('Edit  Wallet'),
+        title: Text(appBarTitle),
+        leading: IconButton(icon: Icon(
+            Icons.arrow_back),
+            onPressed: (){
+              moveToLastScreen();
+            }),
       ),
       body: Padding(
           padding: EdgeInsets.only(top: 15.0,left: 10.0,right: 10.0),
@@ -138,7 +153,10 @@ class WalletDetailState extends State<WalletDetail>{
           ),
           ),
 
-    );
+    ));
   }
 
+  void moveToLastScreen() {
+    Navigator.pop(context);
+  }
 }

@@ -15,7 +15,7 @@ class WalletApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue
           ),
-          home:  WalletDetail() ,//WalletList(),
+          home:  WalletList() ,//WalletList(),
         );
   }
 }
