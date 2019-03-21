@@ -2,7 +2,8 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:wallet_f/model/wallet.dart/';
+import 'package:wallet_f/model/wallet.dart';
+
 
 
 
@@ -25,12 +26,12 @@ class DatabaseHelper{
     if(_databaseHelper == null){
       _databaseHelper =  DatabaseHelper._createInstance(); //This is executed only once, singleton object
     }
-
     return _databaseHelper;
-
   }
+
   Future<Database> get database async {
-    if(_database ==null){
+
+    if(_database == null){
       _database = await initializeDatabase();
 
     }
@@ -51,19 +52,18 @@ class DatabaseHelper{
 
   }
 
-  void _createDb(Database db, int newVersion) async{
+  void _createDb(Database db, int newVersion) async {
 
     await db.execute('CREATE TABLE $walletTable($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colTitle TEXT, '
-        '$colDescription TEXT, $colPriority INTEGER, $colDate TEXT)');
+        '$colDescription TEXT, $colPriority INTEGER, $colDate TEXT, $colSum INTEGER)');
   }
 
   // Fetch Operation: Get all note objects from database
 
-  Future<List<Map<String,dynamic>>> getNoteMapList() async {
+  Future<List<Map<String,dynamic>>> getWalletMapList() async {
     Database db = await this.database;
     //var result = await db.rawQuery('SELECT * FROM $walletTable order by $colPriority ASC' );
     var result = await db.query(walletTable, orderBy: '$colPriority ASC');
-
     return result;
 
   }
@@ -87,17 +87,35 @@ class DatabaseHelper{
   // Delete Operation: Delete a Wallet object from database
   Future<int> deleteWallet(int id) async {
     var db = await this.database;
-    var result = await db.rawDelete('DELETE * FROM $walletTable WHERE $colId' );
+    int result = await db.rawDelete('DELETE FROM $walletTable WHERE $colId = $id');
     return result;
   }
 
 // Get number of Wallet objects in database
   Future<int> getCount() async {
     Database db = await this.database;
-    List<Map<String, dynamic>> x = await db.rawQuery(
-        'SELECT COUNT (*) from $walletTable');
+    List<Map<String, dynamic>> x = await db.rawQuery('SELECT COUNT (*) from $walletTable');
     int result = Sqflite.firstIntValue(x);
     return result;
+  }
+
+
+
+  // Get the 'Map List' [ List<Map> ] and convert it to 'Wallet List' [ List<Wallet> ]
+  Future<List<Wallet>> getWalletList() async {
+
+    var walletMapList = await getWalletMapList(); // Get 'Map List' from database
+
+    int count = walletMapList.length;         // Count the number of map entries in db table
+
+    List<Wallet> walletList = List<Wallet>();
+
+    // For loop to create a 'Note List' from a 'Map List'
+    for (int i = 0; i < count; i++) {
+      walletList.add(Wallet.fromMapObject(walletMapList[i]));
+    }
+
+    return walletList;
   }
 
 

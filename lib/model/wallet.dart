@@ -10,26 +10,24 @@ class Wallet {
   Wallet(this._title,  this._date, this._priority, this._sum, [this._description ]);
   Wallet.withId(this._id, this._title,  this._date, this._priority, this._sum, [this._description ]);
 
-  int get sum => _sum;
+  int get id => _id;
+  String get title => _title;
+  String get description => _description;
 
   int get priority => _priority;
 
   String get date => _date;
 
-  String get description => _description;
-
-  String get title => _title;
-
-  int get id => _id;
+  int get sum => _sum;
 
   set title(String newTitle) {
-    if(newTitle.length<=255){
-      _title = newTitle;
+    if(newTitle.length <= 255){
+      this._title = newTitle;
     }
   }
   set  description(String newDescription) {
-    if(newDescription.length<=255){
-      _title = newDescription;
+    if(newDescription.length <= 255){
+      this._description = newDescription;
     }
   }
 
@@ -52,8 +50,8 @@ class Wallet {
   Map<String,dynamic> toMap(){
 
     var map = Map<String,dynamic>();
-    if(id !=null){
-      map['id']=_id;
+    if(id != null){
+      map['id'] =_id;
     }
 
     map['title'] =_title;
@@ -67,7 +65,7 @@ class Wallet {
   }
 // Extract a Wallet object from Map object
 
-  Wallet.fromMapObject(Map<String,dynamic>map ){
+  Wallet.fromMapObject(Map<String,dynamic> map ){
 
     this._id = map['id'];
     this._title = map['title'];
